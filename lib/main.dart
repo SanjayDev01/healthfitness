@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:healthfitness/screens/splash_screen.dart';
 
@@ -9,9 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       title: 'HealthFitness',
-      home: SplashScreen(),
+      home: const SplashScreen(),
+      builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
     );
   }

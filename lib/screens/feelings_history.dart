@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:healthfitness/model/feelings_history_model.dart';
+import 'package:healthfitness/services/httpservice.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class FeelingsHistory extends StatefulWidget {
@@ -10,6 +15,32 @@ class FeelingsHistory extends StatefulWidget {
 }
 
 class _FeelingsHistoryState extends State<FeelingsHistory> {
+  FeelingsHistoryModel? model;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    EasyLoading.show(status: 'Loading...');
+    Map data = {
+      "user_id": 3206161992,
+      "feeling_date": "15-04-2002",
+    };
+    var res = (await HttpService.hPost(
+      "https://www.qubehealth.com/qube_services/api/testservice/getListOfUserFeeling",
+      data,
+    ));
+    setState(() {
+      model = FeelingsHistoryModel.fromJson(jsonDecode(res.data));
+    });
+    print(model!.data.videoArr.first.youtubeUrl);
+    EasyLoading.dismiss();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,11 +126,11 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Center(
                                       child: Text(
-                                        "30%",
-                                        style: TextStyle(
+                                        "${model?.data.feelingPercentage.Energetic ?? 0}%",
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
                                         ),
@@ -162,11 +193,11 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Center(
                                       child: Text(
-                                        "10%",
-                                        style: TextStyle(
+                                        "${model?.data.feelingPercentage.Sad ?? 0}%",
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
                                         ),
@@ -227,11 +258,11 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Center(
                                       child: Text(
-                                        "40%",
-                                        style: TextStyle(
+                                        "${model?.data.feelingPercentage.Happy ?? 0}%",
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
                                         ),
@@ -292,11 +323,11 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Center(
                                       child: Text(
-                                        "1%",
-                                        style: TextStyle(
+                                        "${model?.data.feelingPercentage.Angry ?? 0}%",
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
                                         ),
@@ -357,11 +388,11 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Center(
                                       child: Text(
-                                        "30%",
-                                        style: TextStyle(
+                                        "${model?.data.feelingPercentage.Calm ?? 0}%",
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
                                         ),
@@ -422,11 +453,11 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Expanded(
+                                  Expanded(
                                     child: Center(
                                       child: Text(
-                                        "30%",
-                                        style: TextStyle(
+                                        "${model?.data.feelingPercentage.Bored ?? 0}%",
+                                        style: const TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
                                         ),
@@ -490,7 +521,7 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                                   const Expanded(
                                     child: Center(
                                       child: Text(
-                                        "30%",
+                                        "0%",
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontFamily: "SFPro",
@@ -831,7 +862,9 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                       width: 30,
                     ),
                     Text(
-                      "9 AM - 12 PM",
+                      model!.data.feelingList.isNotEmpty
+                          ? "${model?.data.feelingList.first.submitTime}"
+                          : "9 AM - 12 PM",
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: "SFPro",
@@ -866,7 +899,9 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                       width: 30,
                     ),
                     Text(
-                      "9 AM - 12 PM",
+                      model!.data.feelingList.isNotEmpty
+                          ? "${model?.data.feelingList[1].submitTime}"
+                          : "9 AM - 12 PM",
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: "SFPro",
@@ -901,7 +936,9 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                       width: 30,
                     ),
                     Text(
-                      "9 AM - 12 PM",
+                      model!.data.feelingList.isNotEmpty
+                          ? "${model?.data.feelingList[2].submitTime}"
+                          : "9 AM - 12 PM",
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: "SFPro",
@@ -958,32 +995,41 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                   ),
                 ),
                 SizedBox(
-                  height: 180,
+                  height: 140,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        width: 248,
-                        height: 148,
+                      Stack(
                         alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/images/image1.png",
-                          fit: BoxFit.fill,
-                          scale: 0.2,
-                        ),
+                        children: [
+                          Container(
+                            width: 248,
+                            height: 148,
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              "assets/images/image1.png",
+                              fit: BoxFit.fill,
+                              scale: 0.2,
+                            ),
+                          ),
+                          Image.asset("assets/images/youtube.png"),
+                        ],
                       ),
-                      Container(
-                        width: 248,
-                        height: 148,
+                      Stack(
                         alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/images/image2.png",
-                          fit: BoxFit.fill,
-                          scale: 0.2,
-                        ),
+                        children: [
+                          Container(
+                            width: 248,
+                            height: 148,
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              "assets/images/image2.png",
+                              fit: BoxFit.fill,
+                              scale: 0.2,
+                            ),
+                          ),
+                          Image.asset("assets/images/youtube.png"),
+                        ],
                       ),
                     ],
                   ),
