@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:healthfitness/model/feelings_history_model.dart';
 import 'package:healthfitness/services/httpservice.dart';
@@ -26,7 +25,7 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
   }
 
   getData() async {
-    EasyLoading.show(status: 'Loading...');
+    // EasyLoading.show(status: 'Loading...');
     Map data = {
       "user_id": 3206161992,
       "feeling_date": "15-04-2002",
@@ -39,7 +38,7 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
       model = FeelingsHistoryModel.fromJson(jsonDecode(res.data));
     });
     print(model!.data.videoArr.first.youtubeUrl);
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
   }
 
   void _launchUrl() async {
@@ -869,9 +868,7 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                       width: 30,
                     ),
                     Text(
-                      model!.data.feelingList.isNotEmpty
-                          ? "${model?.data.feelingList.first.submitTime}"
-                          : "9 AM - 12 PM",
+                      "9 AM - 12 PM",
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: "SFPro",
@@ -906,9 +903,7 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                       width: 30,
                     ),
                     Text(
-                      model!.data.feelingList.isNotEmpty
-                          ? "${model?.data.feelingList[1].submitTime}"
-                          : "9 AM - 12 PM",
+                      "9 AM - 12 PM",
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: "SFPro",
@@ -943,9 +938,7 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                       width: 30,
                     ),
                     Text(
-                      model!.data.feelingList.isNotEmpty
-                          ? "${model?.data.feelingList[2].submitTime}"
-                          : "9 AM - 12 PM",
+                      "9 AM - 12 PM",
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: "SFPro",
