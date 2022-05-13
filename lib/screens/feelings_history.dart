@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:healthfitness/model/feelings_history_model.dart';
 import 'package:healthfitness/services/httpservice.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeelingsHistory extends StatefulWidget {
   const FeelingsHistory({Key? key}) : super(key: key);
@@ -39,6 +40,12 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
     });
     print(model!.data.videoArr.first.youtubeUrl);
     EasyLoading.dismiss();
+  }
+
+  void _launchUrl() async {
+    if (!await launchUrl(Uri.parse(model!.data.videoArr.first.youtubeUrl))) {
+      throw 'Could not launch ${model!.data.videoArr.first.youtubeUrl}';
+    }
   }
 
   @override
@@ -999,21 +1006,24 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 248,
-                            height: 148,
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              "assets/images/image1.png",
-                              fit: BoxFit.fill,
-                              scale: 0.2,
+                      InkWell(
+                        onTap: _launchUrl,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 248,
+                              height: 148,
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                "assets/images/image1.png",
+                                fit: BoxFit.fill,
+                                scale: 0.2,
+                              ),
                             ),
-                          ),
-                          Image.asset("assets/images/youtube.png"),
-                        ],
+                            Image.asset("assets/images/youtube.png"),
+                          ],
+                        ),
                       ),
                       Stack(
                         alignment: Alignment.center,
