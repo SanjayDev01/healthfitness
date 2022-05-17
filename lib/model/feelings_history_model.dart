@@ -11,7 +11,7 @@ class FeelingsHistoryModel {
     data = Data.fromJson(json['data']);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson(FeelingsHistoryModel? model) {
     final _data = <String, dynamic>{};
     _data['status'] = status;
     _data['data'] = data.toJson();

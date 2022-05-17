@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:healthfitness/model/feelings_history_model.dart';
 import 'package:healthfitness/services/httpservice.dart';
@@ -25,20 +26,26 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
   }
 
   getData() async {
-    // EasyLoading.show(status: 'Loading...');
-    Map data = {
-      "user_id": 3206161992,
-      "feeling_date": "15-04-2002",
-    };
-    var res = (await HttpService.hPost(
-      "https://www.qubehealth.com/qube_services/api/testservice/getListOfUserFeeling",
-      data,
-    ));
-    setState(() {
-      model = FeelingsHistoryModel.fromJson(jsonDecode(res.data));
-    });
-    print(model!.data.videoArr.first.youtubeUrl);
-    // EasyLoading.dismiss();
+    try {
+      EasyLoading.show(status: 'Loading...');
+      Map data = {
+        "user_id": 3206161992,
+        "feeling_date": "15-04-2002",
+      };
+      var res = (await HttpService.hPost(
+        "https://www.qubehealth.com/qube_services/api/testservice/getListOfUserFeeling",
+        data,
+      ));
+      setState(() {
+        model = FeelingsHistoryModel.fromJson(jsonDecode(res.data));
+      });
+
+      print(jsonDecode(res.data));
+      EasyLoading.dismiss();
+    } catch (e) {
+      print(e);
+      EasyLoading.dismiss();
+    }
   }
 
   void _launchUrl() async {
@@ -972,25 +979,30 @@ class _FeelingsHistoryState extends State<FeelingsHistory> {
                   width: MediaQuery.of(context).size.width,
                   child: Container(color: Colors.black),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(
+                Padding(
+                  padding: const EdgeInsets.only(
                     left: 30,
                     bottom: 10,
                     top: 30,
                   ),
                   child: Text(
-                    "You May Find This Interesting",
-                    style: TextStyle(
+                    model!.data.videoArr.isNotEmpty
+                        ? model!.data.videoArr.first.title
+                        : "You May Find This Interesting",
+                    style: const TextStyle(
                       fontSize: 18,
                       fontFamily: "SFPro",
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30, bottom: 10),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 30, right: 30, bottom: 10),
                   child: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit euismod risus elementum magna scelerisque nunc sed varius. Tellus quis tristique adipiscing sed metus, sit ac adipiscing. Leo aenean sed eu purus maecenas posuere ",
-                    style: TextStyle(fontFamily: "SFPro", fontSize: 14),
+                    model!.data.videoArr.isNotEmpty
+                        ? model!.data.videoArr.first.description
+                        : "",
+                    style: const TextStyle(fontFamily: "SFPro", fontSize: 14),
                     maxLines: 4,
                   ),
                 ),
